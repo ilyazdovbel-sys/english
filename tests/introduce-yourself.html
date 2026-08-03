@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduce Yourself — Talk It Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{
+  --ink:#1B1B2F;
+  --bg:#F4F2FC;
+  --card:#FFFFFF;
+  --primary:#6C5CE7;
+  --primary-dark:#4B3AC7;
+  --secondary:#00B8A9;
+  --yellow:#FFC857;
+  --pink:#FF6FA8;
+  --muted:#6b6b80;
+  --line:#E4E0F5;
+  --danger:#E0455B;
+  --success:#0FA37F;
+  --radius:16px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0 0 .4em 0; letter-spacing:-0.01em;}
+button{font-family:inherit;}
+
+#main{max-width:760px; margin:0 auto; padding:40px 24px 80px;}
+
+.crumbs{font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono',monospace; margin-bottom:10px;}
+.type-pill{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600; font-family:'IBM Plex Mono',monospace;
+  padding:4px 12px; border-radius:20px; margin-bottom:14px; color:#fff;
+  background:var(--primary);
+}
+.lesson-goal{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  padding:16px 20px; margin:18px 0 26px; font-size:15px; color:var(--ink);
+}
+.lesson-goal b{color:var(--primary);}
+
+.bubble{
+  position:relative; background:var(--card); border:1px solid var(--line);
+  border-radius:18px; padding:18px 22px; margin:18px 0; box-shadow:0 2px 10px rgba(60,50,120,.04);
+}
+.bubble.left{border-top-left-radius:4px;}
+.bubble .speaker{
+  font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;
+  color:var(--primary); margin-bottom:4px; display:block;
+}
+
+.section-title{
+  font-family:'Space Grotesk',sans-serif; font-size:13px; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--muted); margin:34px 0 12px; display:flex; align-items:center; gap:10px;
+}
+.section-title:before{content:''; width:22px; height:2px; background:var(--primary); display:inline-block;}
+
+.chunk-table{width:100%; border-collapse:collapse; margin:8px 0 20px; font-size:14.5px;}
+.chunk-table th{
+  text-align:left; font-family:'Space Grotesk',sans-serif; font-size:12px; text-transform:uppercase;
+  color:var(--muted); padding:8px 12px; border-bottom:2px solid var(--line);
+}
+.chunk-table td{padding:12px; border-bottom:1px solid var(--line); vertical-align:top;}
+.chunk-table tr:last-child td{border-bottom:none;}
+.chunk-table .chunk{font-weight:600; color:var(--primary-dark); white-space:nowrap;}
+.chunk-table .ex{color:var(--muted); font-style:italic;}
+
+.grammar-table{width:100%; border-collapse:collapse; margin:10px 0 20px; font-size:14.5px;}
+.grammar-table th{background:var(--ink); color:#fff; padding:9px 12px; font-family:'Space Grotesk',sans-serif; font-size:12.5px;}
+.grammar-table td{padding:10px 12px; border-bottom:1px solid var(--line);}
+.grammar-table tr:nth-child(even) td{background:#F8F6FE;}
+
+.passage{
+  background:var(--card); border:1px solid var(--line); border-left:5px solid var(--yellow);
+  border-radius:12px; padding:20px 24px; margin:16px 0; font-size:15.5px; line-height:1.75;
+}
+
+.note{
+  background:#FFF8E8; border:1px solid #F3DFA6; border-radius:12px; padding:12px 16px;
+  font-size:13.5px; margin:14px 0; color:#6b5b1e;
+}
+.note b{color:#8a6b0f;}
+
+.dialogue{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:6px 22px; margin:16px 0;}
+.dialogue p{margin:14px 0;}
+.dialogue .who{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--secondary); margin-right:8px;}
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:none;
+  background:var(--primary); color:#fff; padding:12px 22px; border-radius:30px;
+  font-weight:600; font-size:14.5px; font-family:'Space Grotesk',sans-serif;
+  transition:transform .15s ease, background .15s ease;
+}
+.btn:hover{background:var(--primary-dark); transform:translateY(-1px);}
+.btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+
+.exercise{
+  background:var(--card); border:1.5px solid var(--line); border-radius:14px;
+  padding:16px 20px; margin:14px 0;
+}
+.exercise .q-index{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#fff; background:var(--primary);
+  padding:2px 9px; border-radius:20px; margin-right:8px;
+}
+.exercise .q-text{font-weight:600; margin:8px 0 12px;}
+.options{display:flex; flex-direction:column; gap:8px;}
+.opt{
+  display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px;
+  border:1.5px solid var(--line); cursor:pointer; font-size:14.5px; transition:.15s;
+}
+.opt:hover{border-color:var(--primary);}
+.opt.selected{border-color:var(--primary); background:#F0EBFF;}
+.opt.correct{border-color:var(--success); background:#E6F8F2; font-weight:600;}
+.opt.incorrect{border-color:var(--danger); background:#FCEAEC;}
+.opt input{accent-color:var(--primary);}
+
+.fill-sentence{font-size:15px; line-height:2.4;}
+.blank{
+  border:none; border-bottom:2px solid var(--primary); background:transparent;
+  font-family:'IBM Plex Mono',monospace; font-size:14px; width:110px; text-align:center;
+  padding:3px 4px; outline:none; color:var(--ink);
+}
+.blank.correct{border-color:var(--success); background:#E6F8F2;}
+.blank.incorrect{border-color:var(--danger); background:#FCEAEC;}
+
+.result-banner{
+  margin-top:14px; padding:10px 16px; border-radius:10px; font-weight:600; font-size:14px; display:none;
+}
+.result-banner.show{display:block;}
+.result-banner.good{background:#E6F8F2; color:var(--success);}
+.result-banner.mid{background:#FFF3D6; color:#8a6b0f;}
+.result-banner.bad{background:#FCEAEC; color:var(--danger);}
+
+.send-status{font-size:13px; color:var(--muted); margin-top:8px;}
+
+.homework{
+  background:linear-gradient(135deg,#2A2255,#3A2E7A); color:#fff; border-radius:var(--radius);
+  padding:22px 26px; margin:26px 0 10px;
+}
+.homework h3{color:#fff; display:flex; align-items:center; gap:10px;}
+.homework h3 .icon{background:var(--yellow); color:var(--ink); width:30px; height:30px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:15px;}
+.homework ol{margin:10px 0 0; padding-left:20px; line-height:1.9; font-size:14.5px;}
+.homework ol li::marker{color:var(--yellow); font-weight:700;}
+
+/* ---------- Name-gate screen ---------- */
+#gate{max-width:480px; margin:80px auto; text-align:center;}
+#gate .hero{
+  background:var(--ink); color:#fff; border-radius:20px; padding:36px 30px; margin-bottom:22px;
+}
+#gate .hero h1{font-size:24px; color:#fff;}
+#gate .hero p{color:#CFC9F2; font-size:14px; line-height:1.6;}
+#gate input{
+  width:100%; padding:13px 14px; margin:8px 0; border:1px solid var(--line);
+  border-radius:10px; font-size:15px; font-family:inherit;
+}
+.hidden{display:none;}
+
+@media (max-width:600px){
+  #main{padding:26px 16px 60px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== ЕКРАН РЕЄСТРАЦІЇ ===================== -->
+<div id="gate">
+  <div class="hero">
+    <h1>Talk It Out</h1>
+    <p>Перед початком уроку вкажіть, будь ласка, своє ім'я та прізвище — це потрібно, щоб викладач отримав звіт про ваш результат.</p>
+  </div>
+  <input type="text" id="lastname" placeholder="Прізвище">
+  <input type="text" id="firstname" placeholder="Ім'я">
+  <br>
+  <button class="btn" id="start-btn" disabled style="margin-top:14px;">Розпочати урок →</button>
+</div>
+
+<!-- ===================== СТОРІНКА УРОКУ ===================== -->
+<main id="main" class="hidden">
+  <div class="crumbs">BLOCK 1 · Getting Started &nbsp;/&nbsp; Lesson 2</div>
+  <span class="type-pill">🗨️ Grammar</span>
+  <h1>Introduce Yourself</h1>
+  <div class="lesson-goal"><b>Can-do goal:</b> Introduce yourself and ask basic questions using <em>am</em>, <em>is</em>, and <em>are</em>.</div>
+
+  <div class="section-title">Warm-up</div>
+  <div class="bubble left"><span class="speaker">Before we start...</span>You meet a new classmate. Say three facts about yourself: your name, where you are from, and how you feel today. Which form of <em>to be</em> do you need?</div>
+
+  <div class="section-title">Useful introduction phrases</div>
+  <table class="chunk-table">
+    <tr><th>Phrase</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td class="chunk">I'm ...</td><td>my name / identity</td><td class="ex">"I'm Danylo."</td></tr>
+    <tr><td class="chunk">I'm from ...</td><td>place of origin</td><td class="ex">"I'm from Ukraine."</td></tr>
+    <tr><td class="chunk">This is ...</td><td>introducing another person</td><td class="ex">"This is my friend, Olha."</td></tr>
+    <tr><td class="chunk">Are you ...?</td><td>asking a yes/no question</td><td class="ex">"Are you new here?"</td></tr>
+    <tr><td class="chunk">Nice to meet you.</td><td>first meeting</td><td class="ex">"Nice to meet you, too!"</td></tr>
+  </table>
+  <div class="note"><b>Remember:</b> <em>I'm</em> is the short form of <em>I am</em>. Use it naturally when you speak: "I'm Maria. I'm 12."</div>
+
+  <div class="section-title">Grammar: the verb <em>to be</em></div>
+  <table class="grammar-table">
+    <tr><th>Subject</th><th>Form of <em>to be</em></th><th>Example</th></tr>
+    <tr><td>I</td><td><b>am</b> / 'm</td><td>I am Anton. / I'm Anton.</td></tr>
+    <tr><td>he / she / it</td><td><b>is</b> / 's</td><td>She is my classmate. / She's my classmate.</td></tr>
+    <tr><td>you / we / they</td><td><b>are</b> / 're</td><td>We are in class 6A. / We're in class 6A.</td></tr>
+  </table>
+  <div class="note"><b>Question word order:</b> put <em>am/is/are</em> before the subject: "Are you new?" "Is she your friend?"</div>
+
+  <div class="section-title">Mini-dialogue</div>
+  <div class="dialogue">
+    <p><span class="who">Oleh:</span> Hi! I'm Oleh. What's your name?</p>
+    <p><span class="who">Sofia:</span> Hello, I'm Sofia. Nice to meet you.</p>
+    <p><span class="who">Oleh:</span> Nice to meet you, too. Are you new here?</p>
+    <p><span class="who">Sofia:</span> Yes, I am. I'm from Lviv. Are you from Kyiv?</p>
+    <p><span class="who">Oleh:</span> Yes, I am. We are in the same class!</p>
+  </div>
+
+  <div class="section-title">Practice</div>
+  <div id="exercise-list"></div>
+  <button class="btn" id="check-btn">Check my answers</button>
+  <div class="result-banner" id="result-banner"></div>
+  <div class="send-status" id="send-status"></div>
+
+  <div class="homework">
+    <h3><span class="icon">✎</span> Homework</h3>
+    <ol>
+      <li>Write a 6-line dialogue where two new classmates introduce themselves. Use <em>am</em>, <em>is</em>, and <em>are</em>.</li>
+      <li>Write five true sentences about yourself using <em>I'm</em>.</li>
+      <li>Practise the dialogue aloud twice, then ask a partner: "Are you new here?"</li>
+    </ol>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   НАЛАШТУВАННЯ EMAILJS (ключі вже підставлено)
+   ============================================================ */
+const EMAILJS_SERVICE_ID = "service_mogw9r5";
+const EMAILJS_TEMPLATE_ID = "template_ws34yy2";
+const EMAILJS_PUBLIC_KEY = "ueNyhbpEAI_gBUCdD";
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+/* ============================================================
+   ЗАВДАННЯ УРОКУ — саме цей масив редагує Codex для нового уроку
+   Типи: mcq (варіанти), fill (пропуск), tf (правда/хиба)
+   ============================================================ */
+const EXERCISES = [
+  {type:'mcq', q:'Choose the correct form: "I ___ Maria."', options:['am','is','are','be'], answer:0},
+  {type:'mcq', q:'Choose the correct form: "My name is Taras. I ___ from Kyiv."', options:['am','is','are','be'], answer:0},
+  {type:'fill', sentence:'A: ___ you new here?   B: Yes, I ___.', answers:['are','am']},
+  {type:'fill', sentence:'She ___ my friend. We ___ in the same class.', answers:['is','are']},
+  {type:'mcq', q:'Which question is correct?', options:['You are new?','Are you new?','Is you new?','Am you new?'], answer:1}
+];
+
+/* ---------------- Реєстрація учня ---------------- */
+const gate = document.getElementById('gate');
+const main = document.getElementById('main');
+const lastNameInput = document.getElementById('lastname');
+const firstNameInput = document.getElementById('firstname');
+const startBtn = document.getElementById('start-btn');
+
+function checkFields(){
+  startBtn.disabled = !(lastNameInput.value.trim() && firstNameInput.value.trim());
+}
+lastNameInput.addEventListener('input', checkFields);
+firstNameInput.addEventListener('input', checkFields);
+
+startBtn.addEventListener('click', () => {
+  gate.classList.add('hidden');
+  main.classList.remove('hidden');
+  window.scrollTo({top:0});
+});
+
+/* ---------------- Рендер вправ ---------------- */
+function renderExercise(ex, i){
+  let inner = '';
+  if(ex.type==='mcq'){
+    inner += `<div class="q-text"><span class="q-index">Q${i+1}</span>${ex.q}</div>`;
+    inner += `<div class="options">`;
+    ex.options.forEach((opt,oi)=>{
+      inner += `<label class="opt"><input type="radio" name="ex-${i}" value="${oi}"><span>${opt}</span></label>`;
+    });
+    inner += `</div>`;
+  } else if(ex.type==='fill'){
+    inner += `<div class="q-text"><span class="q-index">Q${i+1}</span>Fill in the blank${ex.answers.length>1?'s':''}.</div>`;
+    let parts = ex.sentence.split('___');
+    let sentenceHtml = parts.map((p,pi)=> pi<parts.length-1 ? `${p}<input class="blank" data-blank="${pi}">` : p).join('');
+    inner += `<div class="fill-sentence">${sentenceHtml}</div>`;
+  } else if(ex.type==='tf'){
+    inner += `<div class="q-text"><span class="q-index">Q${i+1}</span>${ex.q}</div>`;
+    inner += `<div class="options">
+      <label class="opt"><input type="radio" name="ex-${i}" value="0"><span>True</span></label>
+      <label class="opt"><input type="radio" name="ex-${i}" value="1"><span>False</span></label>
+    </div>`;
+  }
+  return `<div class="exercise" id="ex-${i}">${inner}</div>`;
+}
+
+const exerciseList = document.getElementById('exercise-list');
+EXERCISES.forEach((ex,i)=>{ exerciseList.innerHTML += renderExercise(ex,i); });
+
+// візуальний вибір варіанту
+EXERCISES.forEach((ex,i)=>{
+  if(ex.type==='mcq' || ex.type==='tf'){
+    document.querySelectorAll(`#ex-${i} .opt`).forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        document.querySelectorAll(`#ex-${i} .opt`).forEach(o=>o.classList.remove('selected'));
+        opt.classList.add('selected');
+        opt.querySelector('input').checked = true;
+      });
+    });
+  }
+});
+
+/* ---------------- Перевірка та відправка звіту ---------------- */
+document.getElementById('check-btn').addEventListener('click', () => {
+  let correct = 0, total = 0;
+  const mistakes = [];
+
+  EXERCISES.forEach((ex, i) => {
+    const box = document.getElementById(`ex-${i}`);
+
+    if(ex.type==='mcq' || ex.type==='tf'){
+      total++;
+      const chosen = box.querySelector('input:checked');
+      const opts = box.querySelectorAll('.opt');
+      opts.forEach(o=>o.classList.remove('correct','incorrect'));
+      const correctIdx = ex.type==='tf' ? (ex.answer? 0:1) : ex.answer;
+
+      if(chosen){
+        const val = parseInt(chosen.value,10);
+        if(val===correctIdx){ correct++; opts[val].classList.add('correct'); }
+        else {
+          opts[val].classList.add('incorrect'); opts[correctIdx].classList.add('correct');
+          mistakes.push(`${ex.q} — відповів(-ла) "${ex.options ? ex.options[val] : (val===0?'True':'False')}", правильно "${ex.options ? ex.options[correctIdx] : (correctIdx===0?'True':'False')}"`);
+        }
+      } else {
+        opts[correctIdx].classList.add('correct');
+        mistakes.push(`${ex.q} — не відповів(-ла)`);
+      }
+    } else if(ex.type==='fill'){
+      const inputs = box.querySelectorAll('.blank');
+      inputs.forEach((inp,bi)=>{
+        total++;
+        inp.classList.remove('correct','incorrect');
+        const given = (inp.value||'').trim().toLowerCase();
+        const expected = ex.answers[bi].toLowerCase();
+        if(given===expected){ correct++; inp.classList.add('correct'); }
+        else{
+          inp.classList.add('incorrect'); inp.placeholder = ex.answers[bi];
+          mistakes.push(`"${ex.sentence.replace('___', '____')}" — відповів(-ла) "${given || '(порожньо)'}", правильно "${ex.answers[bi]}"`);
+        }
+      });
+    }
+  });
+
+  const banner = document.getElementById('result-banner');
+  banner.classList.add('show');
+  const pct = total ? Math.round(correct/total*100) : 100;
+  banner.className = 'result-banner show ' + (pct>=80?'good':pct>=50?'mid':'bad');
+  banner.textContent = `Результат: ${correct}/${total} (${pct}%) — ${pct>=80?'Чудова робота! 🎉':pct>=50?'Непогано — перевір виділені відповіді.':'Варто повторити матеріал уроку.'}`;
+
+  const statusEl = document.getElementById('send-status');
+  statusEl.textContent = 'Надсилаємо звіт викладачу...';
+
+  const studentName = `${lastNameInput.value.trim()} ${firstNameInput.value.trim()}`;
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    student: studentName,
+    score: `${correct} з ${total} (${pct}%)`,
+    mistakes: mistakes.length ? mistakes.join('\n') : 'Без помилок'
+  }).then(() => {
+    statusEl.textContent = 'Звіт надіслано викладачу.';
+  }).catch(() => {
+    statusEl.textContent = 'Результат збережено, але звіт надіслати не вдалось.';
+  });
+});
+</script>
+</body>
+</html>
